@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .stopwatch-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .student-ids {
+            margin-bottom: 20px;
+        }
+        .student-ids p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .time-display {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stopwatch-container">
+        <div class="student-ids">
+            <p>BIM/22/2049</p>
+            <p>BIM/22/2052</p>
+            <p>BIM/22/2059</p>
+            <p>BIM/22/2091</p>
+            <p>BIM/22/2083</p>
+        </div>
+        <div id="time-display" class="time-display">00:00:00</div>
+        <div class="button-container">
+            <button id="start-btn" onclick="startStopwatch()">Start</button>
+            <button id="stop-btn" onclick="stopStopwatch()" disabled>Stop</button>
+            <button id="reset-btn" onclick="resetStopwatch()" disabled>Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
+        let interval;
+
+        function updateTimeDisplay() {
+            // Format time as HH:MM:SS
+            const formattedTime =
+                (hours < 10 ? "0" + hours : hours) + ":" +
+                (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                (seconds < 10 ? "0" + seconds : seconds);
+            document.getElementById('time-display').innerText = formattedTime;
+        }
+
+        function startStopwatch() {
+            interval = setInterval(function() {
+                seconds++;
+                if (seconds === 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes === 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+                updateTimeDisplay();
+            }, 1000);
+
+            // Disable start and enable stop/reset buttons
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('stop-btn').disabled = false;
+            document.getElementById('reset-btn').disabled = false;
+        }
+
+        function stopStopwatch() {
+            clearInterval(interval);
+
+            // Enable start button and disable stop button
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('stop-btn').disabled = true;
+        }
+
+        function resetStopwatch() {
+            clearInterval(interval);
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+            updateTimeDisplay();
+
+            // Disable stop/reset buttons and enable start button
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('stop-btn').disabled = true;
+            document.getElementById('reset-btn').disabled = true;
+        }
+    </script>
+
+</body>
+</html>
